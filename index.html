@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GovTech Organizational Chart</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body>
+    <div id="app" class="w-full p-8 bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 overflow-x-auto min-h-screen">
+        <div class="min-w-max">
+            <div class="flex flex-col items-center mb-12">
+                <div class="relative">
+                    <div class="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg blur opacity-50"></div>
+                    <div class="relative bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg shadow-2xl p-8 border-4 border-blue-800">
+                        <div class="flex items-center gap-3 mb-3">
+                            <i data-lucide="building-2" class="w-10 h-10"></i>
+                            <div class="text-3xl font-bold">GovTech</div>
+                        </div>
+                        <div class="flex gap-6 text-base bg-white bg-opacity-20 rounded-lg p-3">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="users" class="w-5 h-5"></i>
+                                <span class="font-semibold" id="total-manpower">0 Manpower</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="user-plus" class="w-5 h-5"></i>
+                                <span class="font-semibold" id="total-augmented">0 Augmented</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-1 h-12 bg-gradient-to-b from-blue-600 to-gray-400"></div>
+            </div>
+
+            <div class="grid grid-cols-4 gap-8" id="divisions-container">
+                <!-- Divisions will be rendered here -->
+            </div>
+
+            <div class="mt-12 bg-white rounded-xl shadow-lg p-6">
+                <div class="flex justify-center gap-8 text-sm">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="users" class="w-5 h-5 text-blue-500"></i>
+                        <span class="font-semibold text-gray-700">Manpower</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="user-plus" class="w-5 h-5 text-green-500"></i>
+                        <span class="font-semibold text-gray-700">Augmented</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-gray-500">
+                        <span class="text-xs">💡 Click on divisions to expand programmes</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data
+        const divisionIcons = {
+            "CIO Office": "building-2",
+            "Corporate Functions": "briefcase",
+            "Cyber Security": "shield",
+            "Digital Economy Products": "globe",
+            "Digital Society Products": "users",
+            "Government Digital Transformation": "zap",
+            "Government Incident Reporting and Operations Centre": "lock",
+            "Government Productivity Engineering": "cpu",
+            "Government Technology Office": "code",
+            "GovTech Programmes": "database",
+            "GovTech Strategic Programmes": "network",
+            "Others": "settings"
+        };
+
+        const divisionColors = {
+            "CIO Office": "from-purple-500 to-purple-600 border-purple-700",
+            "Corporate Functions": "from-indigo-500 to-indigo-600 border-indigo-700",
+            "Cyber Security": "from-red-500 to-red-600 border-red-700",
+            "Digital Economy Products": "from-green-500 to-green-600 border-green-700",
+            "Digital Society Products": "from-teal-500 to-teal-600 border-teal-700",
+            "Government Digital Transformation": "from-orange-500 to-orange-600 border-orange-700",
+            "Government Incident Reporting and Operations Centre": "from-pink-500 to-pink-600 border-pink-700",
+            "Government Productivity Engineering": "from-cyan-500 to-cyan-600 border-cyan-700",
+            "Government Technology Office": "from-blue-500 to-blue-600 border-blue-700",
+            "GovTech Programmes": "from-violet-500 to-violet-600 border-violet-700",
+            "GovTech Strategic Programmes": "from-emerald-500 to-emerald-600 border-emerald-700",
+            "Others": "from-gray-500 to-gray-600 border-gray-700"
+        };
+
+        const orgData = {
+            "CIO Office": [
+                { name: "CIO Office", manpower: 48, augmented: 0 },
+                { name: "Chief Data Office", manpower: 0, augmented: 0 }
+            ],
+            "Corporate Functions": [
+                { name: "Chief Executive Office", manpower: 22, augmented: 0 },
+                { name: "Communications & Marketing Group", manpower: 25, augmented: 0 },
+                { name: "DCE ACE Office (SGC)", manpower: 8, augmented: 0 },
+                { name: "DCE/ACE Office (PDM)", manpower: 4, augmented: 0 },
+                { name: "Digital Governance Group", manpower: 44, augmented: 4 },
+                { name: "Finance", manpower: 67, augmented: 0 },
+                { name: "GT Internal Audit", manpower: 10, augmented: 0 },
+                { name: "ICT Audit Shared Services", manpower: 11, augmented: 0 },
+                { name: "Legal", manpower: 5, augmented: 0 },
+                { name: "NP_SCG Programme Office", manpower: 0, augmented: 0 },
+                { name: "Organisation Excellence", manpower: 0, augmented: 0 },
+                { name: "People Organisation Division", manpower: 78, augmented: 0 },
+                { name: "Procurement & Contracts Division", manpower: 52, augmented: 9 },
+                { name: "Strategy and Plans Division", manpower: 10, augmented: 0 },
+                { name: "Systems and Process Transformation", manpower: 0, augmented: 0 },
+                { name: "Transformation Office", manpower: 9, augmented: 0 }
+            ],
+            "Cyber Security": [
+                { name: "AI", manpower: 4, augmented: 0 },
+                { name: "CentEx-Cybersecurity", manpower: 0, augmented: 0 },
+                { name: "Cyber Posture Mgmt", manpower: 0, augmented: 0 },
+                { name: "Cyber Security Central Services", manpower: 0, augmented: 0 },
+                { name: "Cyber Security Group", manpower: 2, augmented: 1 },
+                { name: "Detection & Response Engineering", manpower: 10, augmented: 3 },
+                { name: "FNV", manpower: 50, augmented: 0 },
+                { name: "Human Risk and Training", manpower: 0, augmented: 0 },
+                { name: "MCISO", manpower: 27, augmented: 0 },
+                { name: "PPSD", manpower: 10, augmented: 0 },
+                { name: "Security Assurance", manpower: 28, augmented: 0 },
+                { name: "Security Protection", manpower: 32, augmented: 0 }
+            ],
+            "Digital Economy Products": [
+                { name: "Apps - Health Central Cost", manpower: 0, augmented: 0 },
+                { name: "Digital Economy Products Central Costs", manpower: 19, augmented: 0 },
+                { name: "Digital Economy Products Central Costs (Manpower)", manpower: 0, augmented: 0 },
+                { name: "Digital Economy Products Central Costs (National Development)", manpower: 0, augmented: 0 },
+                { name: "Product Innovation Centre (PIC)", manpower: 0, augmented: 0 }
+            ],
+            "Digital Society Products": [
+                { name: "Centre of Excellence for Saas Products", manpower: 33, augmented: 30 },
+                { name: "Digital Society Products Central Costs", manpower: 12, augmented: 0 },
+                { name: "Digital Society Products Central Costs (Education)", manpower: 45, augmented: 0 },
+                { name: "Digital Society Products Central Costs (G2C)", manpower: 0, augmented: 0 },
+                { name: "Digital Society Products Central Costs (Housing)", manpower: 82, augmented: 55 },
+                { name: "Digital Society Products Central Costs (Info Services)", manpower: 0, augmented: 0 },
+                { name: "G2C Agency Professional Services", manpower: 0, augmented: 0 },
+                { name: "Government Digital Services - Dcube", manpower: 0, augmented: 0 },
+                { name: "Government Digital Services - Digital Design & Development", manpower: 1, augmented: 0 },
+                { name: "NP_Apps - Social Central Cost", manpower: 0, augmented: 0 },
+                { name: "NP_GDP Apps (Social) Central Cost", manpower: 0, augmented: 0 },
+                { name: "Platform - Support & Engagement Central Cost", manpower: 0, augmented: 0 }
+            ],
+            "Government Digital Transformation": [
+                { name: "Cluster HQ", manpower: 227, augmented: 48 },
+                { name: "Consulting Services", manpower: 5, augmented: 0 },
+                { name: "Culture Community and Youth Cluster", manpower: 119, augmented: 20 },
+                { name: "DCIO", manpower: 0, augmented: 0 },
+                { name: "Digital Sustainability Office", manpower: 0, augmented: 0 },
+                { name: "Education and Learning", manpower: 250, augmented: 37 },
+                { name: "Finance Cluster", manpower: 138, augmented: 10 },
+                { name: "Justice Law and Foreign Affairs", manpower: 150, augmented: 30 },
+                { name: "Land Transport Authority (LTA)", manpower: 0, augmented: 0 },
+                { name: "Management and Consulting", manpower: 0, augmented: 0 },
+                { name: "Manpower Cluster", manpower: 215, augmented: 62 },
+                { name: "Ministry of Digital Development and Information", manpower: 79, augmented: 12 },
+                { name: "Ministry of Health", manpower: 126, augmented: 22 },
+                { name: "Ministry of Home Affairs", manpower: 34, augmented: 2 },
+                { name: "Ministry of Sustainability and the Environment Cluster", manpower: 104, augmented: 8 },
+                { name: "NP_Defence Cluster (fka Alliance for Digital Transformation (ADx))", manpower: 0, augmented: 0 },
+                { name: "National Development & Transport Cluster", manpower: 110, augmented: 10 },
+                { name: "Prime Minister's Office", manpower: 167, augmented: 16 },
+                { name: "Social & Family Development", manpower: 144, augmented: 65 },
+                { name: "Trade & Industry Cluster", manpower: 149, augmented: 27 }
+            ],
+            "Government Incident Reporting and Operations Centre": [
+                { name: "Government Incident Reporting and Operations Centre", manpower: 11, augmented: 0 }
+            ],
+            "Government Productivity Engineering": [
+                { name: "ATFM", manpower: 0, augmented: 0 },
+                { name: "BT_NBT", manpower: 0, augmented: 0 },
+                { name: "BT_PCBT", manpower: 0, augmented: 0 },
+                { name: "BT_SSBT", manpower: 0, augmented: 0 },
+                { name: "BT_Whole of Government Comms", manpower: 0, augmented: 0 },
+                { name: "Central Asset Intelligence Platform", manpower: 0, augmented: 0 },
+                { name: "Central-IOC", manpower: 4, augmented: 1 },
+                { name: "Central-ITSM/ServiceNow", manpower: 14, augmented: 5 },
+                { name: "Central_Central Automation Platform", manpower: 5, augmented: 0 },
+                { name: "Central_Central Infra Initiatives + GPE-wide POCs", manpower: 5, augmented: 1 },
+                { name: "Central_Collaboration & Productivity Tools", manpower: 1, augmented: 0 },
+                { name: "Central_Compute and Storage", manpower: 1, augmented: 0 },
+                { name: "Central_GNOC", manpower: 1, augmented: 0 },
+                { name: "Central_Log Management Platform", manpower: 0, augmented: 0 },
+                { name: "Central_Nucleus", manpower: 10, augmented: 3 },
+                { name: "Central_Observability Management Platform", manpower: 3, augmented: 0 },
+                { name: "Central_Pdt Change Mgmt", manpower: 4, augmented: 1 },
+                { name: "Central_WOG ICT Infra Other Ops", manpower: 0, augmented: 0 },
+                { name: "GPE MP Mgmt Central CC", manpower: 0, augmented: 0 },
+                { name: "Google Workspace (GWS)", manpower: 0, augmented: 0 },
+                { name: "Government Infrastructure Consulting", manpower: 0, augmented: 0 },
+                { name: "MP_Corp Gov/Biz Ops & Audit/Compliance", manpower: 10, augmented: 0 },
+                { name: "MP_Manpower Central CC", manpower: 18, augmented: 3 },
+                { name: "MP_Programme Office (PMO)", manpower: 4, augmented: 2 },
+                { name: "Microsoft Government Licensing Program", manpower: 9, augmented: 0 },
+                { name: "Monitoring Operations Command Center - Infra", manpower: 0, augmented: 0 }
+            ],
+            "Government Technology Office": [
+                { name: "AI Practice", manpower: 63, augmented: 0 },
+                { name: "CapDev", manpower: 2, augmented: 0 },
+                { name: "Consulting teams", manpower: 0, augmented: 0 },
+                { name: "Data Engineering Practice", manpower: 12, augmented: 0 },
+                { name: "Design Practice", manpower: 6, augmented: 0 },
+                { name: "Digital Academy", manpower: 11, augmented: 0 },
+                { name: "Digital Incubator Programme", manpower: 3, augmented: 0 },
+                { name: "Forward Deployed Teams", manpower: 0, augmented: 0 },
+                { name: "Government Technology Office Central Cost", manpower: 2, augmented: 0 },
+                { name: "LAUNCH!", manpower: 5, augmented: 0 },
+                { name: "Partnerships and Engagement", manpower: 12, augmented: 5 },
+                { name: "Product Management Practice", manpower: 2, augmented: 0 },
+                { name: "Product Strategy Office", manpower: 4, augmented: 0 },
+                { name: "Software Engineering Practice", manpower: 12, augmented: 1 },
+                { name: "Technology Management Office", manpower: 9, augmented: 0 }
+            ],
+            "GovTech Programmes": [
+                { name: "API Exchange (APEX) - On Prem", manpower: 0, augmented: 0 },
+                { name: "Apps - G2B Channels Central Cost", manpower: 13, augmented: 7 },
+                { name: "CEP - Central Manpower", manpower: 0, augmented: 0 },
+                { name: "CEP - Central Tools", manpower: 0, augmented: 0 },
+                { name: "CEP - Offshore Development Programme Office", manpower: 3, augmented: 0 },
+                { name: "CFT Plus", manpower: 0, augmented: 0 },
+                { name: "CentEx-App DDD", manpower: 0, augmented: 0 },
+                { name: "DEDIP Central Program Office", manpower: 14, augmented: 1 },
+                { name: "EPP Adoption Function", manpower: 0, augmented: 0 },
+                { name: "EPP Central Program Office", manpower: 2, augmented: 1 },
+                { name: "EPP Manpower", manpower: 42, augmented: 0 },
+                { name: "GDP Platform (CIP) Central Cost", manpower: 9, augmented: 1 },
+                { name: "Government Cloud", manpower: 0, augmented: 0 },
+                { name: "Government Digital Services - ACE", manpower: 0, augmented: 0 },
+                { name: "Government Digital Services - ACE EOM", manpower: 2, augmented: 0 },
+                { name: "Hosting Consolidation", manpower: 0, augmented: 0 },
+                { name: "Hosting Support Services", manpower: 2, augmented: 0 },
+                { name: "Managed Hosting Infrastructure Program", manpower: 0, augmented: 0 },
+                { name: "NP_DATA Central Office", manpower: 0, augmented: 0 },
+                { name: "Platform - Content Management and Assurance Central Cost", manpower: 5, augmented: 0 },
+                { name: "Platform - Data and AI Central Cost", manpower: 15, augmented: 0 },
+                { name: "Platform - Insights Generation Central Cost", manpower: 1, augmented: 0 },
+                { name: "Platform - Policy Productivity Central Cost", manpower: 26, augmented: 18 }
+            ],
+            "GovTech Strategic Programmes": [
+                { name: "Anti-Fraud", manpower: 12, augmented: 0 },
+                { name: "CentEx-SCTD", manpower: 0, augmented: 0 },
+                { name: "CentEx-Services (GIS Specialist Office)", manpower: 0, augmented: 0 },
+                { name: "GeoSpatial Specialist Office", manpower: 0, augmented: 0 },
+                { name: "GovTech Anti Scam Product (GASP) - Central", manpower: 18, augmented: 0 },
+                { name: "NP_Singpass Customer Support", manpower: 0, augmented: 0 },
+                { name: "NP_Singpass Data Analytics Platform (DAP)", manpower: 0, augmented: 0 },
+                { name: "NP_Singpass Identity", manpower: 35, augmented: 7 },
+                { name: "NP_Singpass Security", manpower: 0, augmented: 0 },
+                { name: "National Certification Authority (NCA)", manpower: 0, augmented: 0 },
+                { name: "Partner Experience (PX)", manpower: 8, augmented: 0 },
+                { name: "SSID Bulk Tender", manpower: 0, augmented: 0 },
+                { name: "Sensor_aaS", manpower: 0, augmented: 0 },
+                { name: "Singpass - Next Factor", manpower: 0, augmented: 0 },
+                { name: "Singpass App (SPA)", manpower: 0, augmented: 0 },
+                { name: "Singpass Central Costs", manpower: 12, augmented: 0 },
+                { name: "Singpass Core Platform", manpower: 0, augmented: 0 },
+                { name: "Smart City Technology (SCTD)", manpower: 77, augmented: 3 },
+                { name: "T&A-Punggol Digital District", manpower: 0, augmented: 0 }
+            ],
+            "Others": [
+                { name: "Assurity Trusted Solutions Pte Ltd", manpower: 0, augmented: 0 },
+                { name: "DSAID Capcen", manpower: 0, augmented: 0 },
+                { name: "Data Science & AI", manpower: 1, augmented: 0 },
+                { name: "Moments of Life", manpower: 0, augmented: 0 },
+                { name: "Officers on Secondment", manpower: 48, augmented: 0 },
+                { name: "Open Government Products", manpower: 173, augmented: 0 },
+                { name: "Smart Nation Platform Solutions", manpower: 0, augmented: 0 }
+            ]
+        };
+
+        // State
+        let expandedDivisions = {};
+
+        // Functions
+        function calculateDivisionTotals(programmes) {
+            return programmes.reduce((acc, prog) => ({
+                manpower: acc.manpower + (prog.manpower || 0),
+                augmented: acc.augmented + (prog.augmented || 0)
+            }), { manpower: 0, augmented: 0 });
+        }
+
+        function toggleDivision(division) {
+            expandedDivisions[division] = !expandedDivisions[division];
+            renderDivisions();
+        }
+
+        function renderDivisions() {
+            const container = document.getElementById('divisions-container');
+            container.innerHTML = '';
+
+            Object.entries(orgData).forEach(([division, programmes]) => {
+                const isExpanded = expandedDivisions[division];
+                const totals = calculateDivisionTotals(programmes);
+                const iconName = divisionIcons[division] || 'settings';
+                const colorClass = divisionColors[division];
+
+                const divisionElement = document.createElement('div');
+                divisionElement.className = 'flex flex-col items-center';
+                divisionElement.innerHTML = `
+                    <div class="relative bg-gradient-to-br ${colorClass} text-white rounded-xl shadow-xl p-5 cursor-pointer hover:shadow-2xl hover:scale-105 transition-all duration-300 w-72 border-3" onclick="toggleDivision('${division}')">
+                        <div class="absolute top-2 right-2 opacity-20">
+                            <i data-lucide="${iconName}" class="w-16 h-16"></i>
+                        </div>
+                        <div class="relative">
+                            <div class="flex items-start gap-3 mb-3">
+                                <i data-lucide="${iconName}" class="w-7 h-7 mt-1 flex-shrink-0"></i>
+                                <div class="font-bold text-sm leading-tight min-h-16 flex items-center">
+                                    ${division}
+                                </div>
+                            </div>
+                            <div class="bg-white bg-opacity-25 rounded-lg p-3 mb-2">
+                                <div class="flex justify-between text-sm">
+                                    <div class="flex items-center gap-2">
+                                        <i data-lucide="users" class="w-4 h-4"></i>
+                                        <span class="font-semibold">${totals.manpower}</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <i data-lucide="user-plus" class="w-4 h-4"></i>
+                                        <span class="font-semibold">${totals.augmented}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-center text-white text-xs bg-white bg-opacity-20 rounded py-1">
+                                <i data-lucide="${isExpanded ? 'chevron-up' : 'chevron-down'}" class="w-4 h-4"></i>
+                                <span class="ml-1 font-medium">${programmes.length} programmes</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    ${isExpanded ? '<div class="w-1 h-8 bg-gradient-to-b from-gray-400 to-gray-300"></div>' : ''}
+
+                    ${isExpanded ? `
+                        <div class="space-y-3 w-72">
+                            ${programmes.map(prog => `
+                                <div class="bg-white border-2 border-gray-200 rounded-lg p-3 text-xs shadow-md hover:shadow-lg hover:border-blue-300 transition-all duration-200">
+                                    <div class="font-semibold text-gray-800 mb-2 leading-tight">${prog.name}</div>
+                                    <div class="flex justify-between text-gray-600 bg-gray-50 rounded p-2">
+                                        <div class="flex items-center gap-1">
+                                            <i data-lucide="users" class="w-3 h-3 text-blue-500"></i>
+                                            <span class="font-medium">${prog.manpower || 0}</span>
+                                        </div>
+                                        <div class="flex items-center gap-1">
+                                            <i data-lucide="user-plus" class="w-3 h-3 text-green-500"></i>
+                                            <span class="font-medium">${prog.augmented || 0}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+                `;
+                container.appendChild(divisionElement);
+            });
+
+            // Initialize Lucide icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }
+
+        function updateGrandTotal() {
+            const grandTotal = Object.values(orgData).reduce((acc, programmes) => {
+                const divTotal = calculateDivisionTotals(programmes);
+                return {
+                    manpower: acc.manpower + divTotal.manpower,
+                    augmented: acc.augmented + divTotal.augmented
+                };
+            }, { manpower: 0, augmented: 0 });
+
+            document.getElementById('total-manpower').textContent = `${grandTotal.manpower.toLocaleString()} Manpower`;
+            document.getElementById('total-augmented').textContent = `${grandTotal.augmented} Augmented`;
+        }
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            updateGrandTotal();
+            renderDivisions();
+        });
+    </script>
+</body>
+</html>
+        
